@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 서비스 인터페이스를 namespace로 지정한다. -->
+<mapper namespace="com.edu.springboot.regist.RMemberService">
+
+	<insert id="insertMember"
+		parameterType="com.edu.springboot.regist.MemberDTO">
+		insert into member values(#{email}, #{name}, #{password}, 
+		#{sex}, #{birth}, #{ phone}, #{ address}, #{ center}, #{ height}, 
+		#{ weight }, #{disease }, #{purpose }, #{keyword }, #{inflow }, #{point})
+	</insert>
+	
+	<insert id="insertLog"
+		parameterType="com.edu.springboot.regist.MemberDTO">
+		insert into member_log(mlog_idx, email, m_action)
+   		 values(seq_member_num.nextval,#{email},'insert')
+	</insert>
+	
+	<select id="select"
+		parameterType="com.edu.springboot.regist.MemberDTO"
+		resultType="com.edu.springboot.regist.MemberDTO">
+		select * from member inner join member_log 
+	    on member.email = member_log.email
+	    where m_action='insert'
+	    order by memberdate desc
+	</select>
+	
+	<select id="login"
+		parameterType="com.edu.springboot.regist.MemberDTO"
+		resultType="String">
+		select email from member 
+	    where email=#{email} and password=#{password}
+	</select>
+	
+</mapper>
