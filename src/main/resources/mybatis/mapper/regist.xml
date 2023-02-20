@@ -9,16 +9,51 @@
 
 	<insert id="insertMember"
 		parameterType="com.edu.springboot.regist.MemberDTO">
-		insert into member values(#{email}, #{name}, #{password}, 
-		#{sex}, #{birth}, #{ phone}, #{ address}, #{ center}, #{ height}, 
-		#{ weight }, #{disease }, #{purpose }, #{keyword }, #{inflow }, #{point})
+		insert into MEMBER (mem_id, mem_pass, mem_name, mem_gender, 
+			mem_birth, mem_phone, mem_address, mem_type, mem_status, 
+			gym_code, mem_height, mem_weight, mem_disease, mem_purpose, 
+			mem_interest, mem_inflow, mem_point,mem_regidate)
+    	values (#{mem_id}, #{mem_pass}, #{mem_name}, #{mem_gender},
+    		#{mem_birth}, #{mem_phone}, #{mem_address}, #{mem_type}, #{mem_status}, 
+    		#{gym_code}, #{mem_height}, #{mem_weight}, #{mem_disease}, #{mem_purpose}, 
+    		#{mem_interest}, #{mem_inflow}, #{mem_point}, sysdate)
 	</insert>
 	
-	<insert id="insertLog"
+	<insert id="insertMemberT"
+		parameterType="com.edu.springboot.regist.MemberDTO">
+		insert into MEMBER (mem_id, mem_pass, mem_name, mem_gender, 
+			mem_birth, mem_phone, mem_address, mem_type, mem_status, 
+			gym_code, mem_career, mem_comment, mem_img, mem_regidate)
+    	values (#{mem_id}, #{mem_pass}, #{mem_name}, #{mem_gender}, 
+    		#{mem_birth}, #{mem_phone}, #{mem_address}, #{mem_type}, #{mem_status}, 
+    		#{gym_code}, #{mem_career}, #{mem_comment}, #{mem_img}, sysdate)
+	</insert>
+	
+	<insert id="insertMemberASUB"
+		parameterType="com.edu.springboot.regist.MemberDTO">
+		insert into MEMBER (mem_id, mem_pass, mem_name, mem_gender, 
+			mem_birth, mem_phone, mem_address, mem_type, mem_status, 
+			gym_code,  mem_comment, mem_img, mem_regidate)
+    	values (#{mem_id}, #{mem_pass}, #{mem_name}, #{mem_gender},
+    		#{mem_birth}, #{mem_phone}, #{mem_address}, #{mem_type}, #{mem_status},
+    		#{gym_code}, #{mem_comment}, #{mem_img}, sysdate)
+	</insert>
+	
+	
+	
+	<!-- <insert id="insertLog"
 		parameterType="com.edu.springboot.regist.MemberDTO">
 		insert into member_log(mlog_idx, email, m_action)
    		 values(seq_member_num.nextval,#{email},'insert')
-	</insert>
+	</insert> -->
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	<select id="select"
 		parameterType="com.edu.springboot.regist.MemberDTO"

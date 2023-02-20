@@ -52,26 +52,93 @@ public class MainController {
 	
 	//회원가입창으로 넘어가기
 	@GetMapping("/regist.do")
-	public String regist1() {
+	public String registM(Model model) {
+		model.addAttribute("mem_type","member");
+		return "regist";
+	}
+	
+	@GetMapping("/registT.do")
+	public String registT(Model model) {
+		model.addAttribute("mem_type","trainer");
+		return "regist";
+	}
+	
+	@GetMapping("/registASUB.do")
+	public String registASUB(Model model) {
+		model.addAttribute("mem_type","admin_sub");
 		return "regist";
 	}
 	
 	//회원가입 폼 받아서 실행
 	@PostMapping("/regist.do")
 	@Transactional
-	public String regist2(MemberDTO memberDTO) {
-		try {
+	public String registM2(MemberDTO memberDTO) {
+//		try {
 			int result = dao.insertMember(memberDTO);
-			int resultlog = dao.insertLog(memberDTO);
+//			int resultlog = dao.insertLog(memberDTO);
 			if(result==1) System.out.println("회원가입이 완료되었습니다.");
-			if(resultlog==1) System.out.println("멤버로그에 insert 완료되었습니다.");
+//			if(resultlog==1) System.out.println("멤버로그에 insert 완료되었습니다.");
 			
-		}
-		catch (Exception e) {
-			System.out.println("제약조건 위반으로 모두 취소되었습니다.");
-		}
+//		}
+//		catch (Exception e) {
+//			System.out.println("제약조건 위반으로 모두 취소되었습니다.");
+//		}
 		return "main";
 	}
+	
+	//회원가입 폼 받아서 실행
+	@PostMapping("/registT.do")
+	@Transactional
+	public String registT2(MemberDTO memberDTO) {
+//		try {
+			int result = dao.insertMemberT(memberDTO);
+//			int resultlog = dao.insertLogT(memberDTO);
+			if(result==1) System.out.println("회원가입이 완료되었습니다.");
+//			if(resultlog==1) System.out.println("멤버로그에 insert 완료되었습니다.");
+			
+//		}
+//		catch (Exception e) {
+//			System.out.println("제약조건 위반으로 모두 취소되었습니다.");
+//		}
+		return "main";
+	}
+	
+	//회원가입 폼 받아서 실행
+	@PostMapping("/registT.do")
+	@Transactional
+	public String registASUB2(MemberDTO memberDTO) {
+//		try {
+		int result = dao.insertMemberASUB(memberDTO);
+//			int resultlog = dao.insertLogT(memberDTO);
+		if(result==1) System.out.println("회원가입이 완료되었습니다.");
+//			if(resultlog==1) System.out.println("멤버로그에 insert 완료되었습니다.");
+		
+//		}
+//		catch (Exception e) {
+//			System.out.println("제약조건 위반으로 모두 취소되었습니다.");
+//		}
+		return "main";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//admin에서 회원목록 보여주기
 	@RequestMapping("/list.do")
@@ -106,98 +173,98 @@ public class MainController {
 		return "main";
 	}
 	
-
-	//카카오톡 인가코드 받기
-	@GetMapping("/callback")
-	@ResponseBody
-	public String kakaocallback(@RequestParam String code) {
-		
-		//post방식으로 key=value 데이터를 요청(카카오쪽으로)
-		RestTemplate rt = new RestTemplate();
-		
-		//HttpHeaders 오브젝트 생성
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-type", "application/x-www-form-urlencoded;charset=UTF-8");
-		
-		//HttpBody 오브젝트 생성
-		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-		params.add("grant_type", "authorization_code");
-		params.add("client_id", "bd8c5cf77602a837f1013c5f5b356e29");
-		params.add("redirect_uri", "http://localhost:8080/callback");
-		params.add("code", code);
-		
-		//HttpHeaders와 HttpBody를 하나의 오브젝트에 담기
-		HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
-			new HttpEntity<>(params, headers);
-		
-		//Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음
-		ResponseEntity<String> response = rt.exchange(
-			"https://kauth.kakao.com/oauth/token",
-			HttpMethod.POST,
-			kakaoTokenRequest,
-			String.class
-		);
-		
-		//Gson,Json Simple,ObjectMapper 라이브러리가 있음
-		ObjectMapper objectMapper = new ObjectMapper();
-		OAuthToken oauthToken = null;
-		try {
-			oauthToken = objectMapper.readValue(response.getBody(), OAuthToken.class);
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("카카오 엑세스 토큰:"+ oauthToken.getAccess_token());
-		
-		RestTemplate rt2 = new RestTemplate();
-		
-		//HttpHeaders 오브젝트 생성
-		HttpHeaders headers2 = new HttpHeaders();
-		headers2.add("Authorization", "Bearer "+oauthToken.getAccess_token());
-		headers2.add("Content-type", "application/x-www-form-urlencoded;charset=UTF-8");
-		
-		
-		//HttpHeaders와 HttpBody를 하나의 오브젝트에 담기
-		HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =
-			new HttpEntity<>(headers2);
-		
-		//Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음
-		ResponseEntity<String> response2 = rt2.exchange(
-			"https://kapi.kakao.com/v2/user/me",
-			HttpMethod.POST,
-			kakaoProfileRequest2,
-			String.class
-		);
-		
-		System.out.println(response2.getBody());
-		
-		ObjectMapper objectMapper2 = new ObjectMapper();
-		KakaoProfile kakaoProfile = null;
-		try {
-			kakaoProfile = objectMapper2.readValue(response2.getBody(), KakaoProfile.class);
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		
-		//User 오브젝트: email, password,
-		System.out.println("카카오 아이디(번호):"+kakaoProfile.getId());
-		System.out.println("카카오 이메일:"+kakaoProfile.getKakao_account().getEmail());
-		
-		System.out.println("블로그 유저이메일(아이디):"+ kakaoProfile.getKakao_account().getEmail());
-		//패스워드 임시로 만들어줌
-		UUID tempPassword = UUID.randomUUID();
-		System.out.println("블로그 패스워드"+tempPassword);
-		
-		
-		
-		
-		
-		return response2.getBody(); 
-	}
+//
+//	//카카오톡 인가코드 받기
+//	@GetMapping("/callback")
+//	@ResponseBody
+//	public String kakaocallback(@RequestParam String code) {
+//		
+//		//post방식으로 key=value 데이터를 요청(카카오쪽으로)
+//		RestTemplate rt = new RestTemplate();
+//		
+//		//HttpHeaders 오브젝트 생성
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.add("Content-type", "application/x-www-form-urlencoded;charset=UTF-8");
+//		
+//		//HttpBody 오브젝트 생성
+//		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+//		params.add("grant_type", "authorization_code");
+//		params.add("client_id", "bd8c5cf77602a837f1013c5f5b356e29");
+//		params.add("redirect_uri", "http://localhost:8080/callback");
+//		params.add("code", code);
+//		
+//		//HttpHeaders와 HttpBody를 하나의 오브젝트에 담기
+//		HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
+//			new HttpEntity<>(params, headers);
+//		
+//		//Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음
+//		ResponseEntity<String> response = rt.exchange(
+//			"https://kauth.kakao.com/oauth/token",
+//			HttpMethod.POST,
+//			kakaoTokenRequest,
+//			String.class
+//		);
+//		
+//		//Gson,Json Simple,ObjectMapper 라이브러리가 있음
+//		ObjectMapper objectMapper = new ObjectMapper();
+//		OAuthToken oauthToken = null;
+//		try {
+//			oauthToken = objectMapper.readValue(response.getBody(), OAuthToken.class);
+//		} catch (JsonMappingException e) {
+//			e.printStackTrace();
+//		} catch (JsonProcessingException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		System.out.println("카카오 엑세스 토큰:"+ oauthToken.getAccess_token());
+//		
+//		RestTemplate rt2 = new RestTemplate();
+//		
+//		//HttpHeaders 오브젝트 생성
+//		HttpHeaders headers2 = new HttpHeaders();
+//		headers2.add("Authorization", "Bearer "+oauthToken.getAccess_token());
+//		headers2.add("Content-type", "application/x-www-form-urlencoded;charset=UTF-8");
+//		
+//		
+//		//HttpHeaders와 HttpBody를 하나의 오브젝트에 담기
+//		HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =
+//			new HttpEntity<>(headers2);
+//		
+//		//Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음
+//		ResponseEntity<String> response2 = rt2.exchange(
+//			"https://kapi.kakao.com/v2/user/me",
+//			HttpMethod.POST,
+//			kakaoProfileRequest2,
+//			String.class
+//		);
+//		
+//		System.out.println(response2.getBody());
+//		
+//		ObjectMapper objectMapper2 = new ObjectMapper();
+//		KakaoProfile kakaoProfile = null;
+//		try {
+//			kakaoProfile = objectMapper2.readValue(response2.getBody(), KakaoProfile.class);
+//		} catch (JsonMappingException e) {
+//			e.printStackTrace();
+//		} catch (JsonProcessingException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		//User 오브젝트: email, password,
+//		System.out.println("카카오 아이디(번호):"+kakaoProfile.getId());
+//		System.out.println("카카오 이메일:"+kakaoProfile.getKakao_account().getEmail());
+//		
+//		System.out.println("블로그 유저이메일(아이디):"+ kakaoProfile.getKakao_account().getEmail());
+//		//패스워드 임시로 만들어줌
+//		UUID tempPassword = UUID.randomUUID();
+//		System.out.println("블로그 패스워드"+tempPassword);
+//		
+//		
+//		
+//		
+//		
+//		return response2.getBody(); 
+//	}
 
 	
 	

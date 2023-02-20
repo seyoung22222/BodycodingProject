@@ -14,6 +14,12 @@
 <ul>
 	<li><a href="regist.do">회원가입하기(member)</a></li>
 </ul>
+<ul>
+	<li><a href="registT.do">트레이너 회원가입하기(member)</a></li>
+</ul>
+<ul>
+	<li><a href="registASUB.do">admin 회원가입하기(member)</a></li>
+</ul>
 
 <ul>
 	<li><a href="drop.do">회원탈퇴하기(member)</a></li>
