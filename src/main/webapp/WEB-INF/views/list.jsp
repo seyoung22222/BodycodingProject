@@ -24,15 +24,15 @@
 
 		<c:forEach items="${memberList }" var="row" varStatus="loop">
 		<tr>
-			<td>${row.center }</td>
-			<td>${row.email }</td>
-			<td>${row.name }</td>
-			<td>${row.sex }</td>
-			<td>${row.birth }</td>
-			<td>${row.phone }</td>
-			<td>${row.memberdate }</td>
+			<td>${row.gym_code }</td>
+			<td>${row.mem_id }</td>
+			<td>${row.mem_name }</td>
+			<td>${row.mem_gender }</td>
+			<td>${row.mem_birth }</td>
+			<td>${row.mem_phone }</td>
+			<td>${row.mem_regidate }</td>
 			<td>
-				<a href="detail.do?email=${row.email }">상세보기</a>
+				<a href="detail.do?mem_id=${row.mem_id }">상세보기</a>
 			</td>
 		</tr>
 		</c:forEach>

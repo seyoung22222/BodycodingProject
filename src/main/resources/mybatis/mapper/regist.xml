@@ -47,22 +47,25 @@
    		 values(seq_member_num.nextval,#{email},'insert')
 	</insert> -->
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	<select id="select"
+	<!-- <select id="select"
 		parameterType="com.edu.springboot.regist.MemberDTO"
 		resultType="com.edu.springboot.regist.MemberDTO">
 		select * from member inner join member_log 
 	    on member.email = member_log.email
 	    where m_action='insert'
 	    order by memberdate desc
+	</select> -->
+	
+	
+	<select id="select"
+		parameterType="com.edu.springboot.regist.MemberDTO"
+		resultType="com.edu.springboot.regist.MemberDTO">
+		select * from member order by mem_regidate desc
 	</select>
+	
+	
+	
+	
 	
 	<select id="login"
 		parameterType="com.edu.springboot.regist.MemberDTO"

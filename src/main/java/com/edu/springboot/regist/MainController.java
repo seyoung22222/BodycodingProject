@@ -104,7 +104,7 @@ public class MainController {
 	}
 	
 	//회원가입 폼 받아서 실행
-	@PostMapping("/registT.do")
+	@PostMapping("/registASUB.do")
 	@Transactional
 	public String registASUB2(MemberDTO memberDTO) {
 //		try {
@@ -119,24 +119,6 @@ public class MainController {
 //		}
 		return "main";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
