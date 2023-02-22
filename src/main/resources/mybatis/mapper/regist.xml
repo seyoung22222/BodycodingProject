@@ -63,15 +63,20 @@
 		select * from member order by mem_regidate desc
 	</select>
 	
-	
-	
-	
-	
 	<select id="login"
 		parameterType="com.edu.springboot.regist.MemberDTO"
 		resultType="String">
 		select mem_id from member
 	    	where mem_id=#{mem_id} and mem_pass=#{mem_pass}
 	</select>
+	
+		<insert id="kakaoinsert"
+		parameterType="hashMap">
+		insert into MEMBER (mem_id, mem_pass, mem_name, mem_gender, 
+			mem_phone, mem_address, mem_type, mem_status)
+    	values (#{mem_id}, '1234', #{mem_name}, #{mem_gender},
+    		'12', '주소', 'MEMBER', '1')
+	</insert>
+	
 	
 </mapper>

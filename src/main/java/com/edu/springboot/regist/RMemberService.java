@@ -1,8 +1,10 @@
 package com.edu.springboot.regist;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface RMemberService{
@@ -15,4 +17,5 @@ public interface RMemberService{
 	public int insertLogASUB(MemberDTO memberDTO);
 	public List<MemberDTO> select();
 	public String login(MemberDTO memberDTO);
+	public int kakaoinsert(Map<String, String> map);
 }

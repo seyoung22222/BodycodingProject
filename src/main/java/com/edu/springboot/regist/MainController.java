@@ -1,11 +1,13 @@
 package com.edu.springboot.regist;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -161,7 +163,7 @@ public class MainController {
 	//카카오톡 로그인
 	@GetMapping("/callback")
 	@ResponseBody
-	public String kakaocallback(@RequestParam String code) {
+	public String kakaocallback(@RequestParam String code, Model model) {
 		//post방식으로 key=value 데이터를 요청(카카오쪽으로)
 		RestTemplate rt = new RestTemplate();
 		
@@ -253,20 +255,35 @@ public class MainController {
 		//User 오브젝트: email, password,
 		System.out.println("카카오 아이디(번호):"+kakaoProfile.getId());
 		System.out.println("카카오 이메일:"+kakaoProfile.getKakao_account().getEmail());
+		System.out.println("카카오 성별:"+kakaoProfile.getKakao_account().getGender());
+		System.out.println("카카오 생일:"+kakaoProfile.getKakao_account().getBirthday());
 		
-		System.out.println("블로그 유저이메일(아이디):"+ kakaoProfile.getKakao_account().getEmail());
+		String mem_gender =null;
+		if(kakaoProfile.getKakao_account().getGender().equals("female")) {
+			mem_gender = "F";
+		}
+		else if(kakaoProfile.getKakao_account().getGender().equals("male")) {
+			mem_gender = "M";
+		}
+		
+		Map<String, String> kakaoregister = new HashMap<String, String>();
+		kakaoregister.put("mem_id", kakaoProfile.getKakao_account().getEmail());
+		kakaoregister.put("mem_gender", mem_gender);
+		kakaoregister.put("mem_name", "카카오"+kakaoProfile.getId().toString());
+		
+		System.out.println(kakaoregister);
+		
+		int result_kakao = dao.kakaoinsert(kakaoregister);
+		
+		System.out.println("222222");
+		
+		/*
+		 1. 회원 목록에 있는지 찾지
+		 2. 있으면 로그인/ 없으면 회원가입 -> 로그인
+		 */
 		
 		
-		
-		
-//		//패스워드 임시로 만들어줌
-//		UUID tempPassword = UUID.randomUUID();
-//		System.out.println("블로그 패스워드"+tempPassword);
-		
-		
-		
-		
-		return response2.getBody(); 
+		return "main"; 
 	}
 
 	
