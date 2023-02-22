@@ -139,7 +139,9 @@ public class MainController {
 	@PostMapping("/login.do")
 	public String login1(HttpSession session, MemberDTO memberDTO) {
 		try {
+			System.out.println("11111");
 			session.setAttribute("UserEmail", dao.login(memberDTO));
+			System.out.println("22222");
 			return "main";
 		}
 		catch (Exception e) {

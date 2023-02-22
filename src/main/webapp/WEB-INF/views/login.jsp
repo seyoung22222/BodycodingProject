@@ -11,11 +11,11 @@
 <h1>회원가입</h1>
     <form method="post" action="/login.do">
     	
-        <label for="email">이메일:</label>
-        <input type="email" id="email" name="email" required><br>
+        <label for="mem_id">이메일:</label>
+        <input type="mem_id" id="mem_id" name="mem_id" required><br>
         
-        <label for="password">비밀번호:</label>
-        <input type="password" id="password" name="password" required><br>
+        <label for="mem_pass">비밀번호:</label>
+        <input type="mem_pass" id="mem_pass" name="mem_pass" required><br>
         
         <button type="submit">로그인하기</button>
         <!-- Host: kauth.kakao.com -->

@@ -70,8 +70,8 @@
 	<select id="login"
 		parameterType="com.edu.springboot.regist.MemberDTO"
 		resultType="String">
-		select email from member 
-	    where email=#{email} and password=#{password}
+		select mem_id from member
+	    	where mem_id=#{mem_id} and mem_pass=#{mem_pass}
 	</select>
 	
 </mapper>
