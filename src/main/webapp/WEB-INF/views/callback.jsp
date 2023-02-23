@@ -5,45 +5,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script type="text/javascript">
-
-	var walletAddress;
-	var totalReceived;
-	var key;
-	var txIDarray = null;
-	var txID = null;
-	
-	function api(code){
-		
-		var grant_type = "authorization_code";
-		var client_id = "bd8c5cf77602a837f1013c5f5b356e29";
-		var redirect_uri = "http://localhost:8080/callback.jsp";
-		var code = code;
-		
-		$.post("https://kauth.kakao.com/oauth/token", 
-			{grant_type:grant_type, client_id:client_id, redirect_uri:redirect_uri, code:code}, function(data){
-					
-			var access_token = data['access_token']
-			$('body').append(access_token+'<br>'); //엑세스토큰값 출력
-			$('body').append('access_token:success | Loading..<br>')	
-			
-			tokenFunction(access_token);
-		});
-	}
-	
-	var tokenRequesst = new XMLHttpRequest();
-	
-	function tokenFunction(access_token){
-		var access_token = access_token;
-		
-		tokenRequest.open("Post","../tokenServlet?access_token="+access_token,true);
-		tokenRequest.
-	}
-
-
-</script>
 </head>
 <body>
+<h1>정보등록을 위해 추가정보를 입력해주세요.</h1>
+    <form method="post" action="/kakaoregist.do">
+		<input type="hidden" id="mem_id" name="mem_id" value="${mem_id }">
+		
+        <label for="mem_name">이름:</label>
+        <input type="text" id="mem_name" name="mem_name" required><br>
 
+        <label for="mem_phone">전화번호:</label>
+        <input type="tel" id="mem_phone" name="mem_phone" required><br>
+
+        <label for="mem_address">주소:</label>
+        <input type="text" id="mem_address" name="mem_address" required><br>
+        
+        <button type="submit">완료</button>
+	</form>
 </body>
 </html>

@@ -18,4 +18,6 @@ public interface RMemberService{
 	public List<MemberDTO> select();
 	public String login(MemberDTO memberDTO);
 	public int kakaoinsert(Map<String, String> map);
+	public String kakaoselect(String mem_id);
+	public int kakaoupdate(MemberDTO memberDTO);
 }

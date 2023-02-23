@@ -141,9 +141,7 @@ public class MainController {
 	@PostMapping("/login.do")
 	public String login1(HttpSession session, MemberDTO memberDTO) {
 		try {
-			System.out.println("11111");
 			session.setAttribute("UserEmail", dao.login(memberDTO));
-			System.out.println("22222");
 			return "main";
 		}
 		catch (Exception e) {
@@ -162,8 +160,7 @@ public class MainController {
 
 	//카카오톡 로그인
 	@GetMapping("/callback")
-	@ResponseBody
-	public String kakaocallback(@RequestParam String code, Model model) {
+	public String kakaocallback(@RequestParam String code, HttpSession session) {
 		//post방식으로 key=value 데이터를 요청(카카오쪽으로)
 		RestTemplate rt = new RestTemplate();
 		
@@ -254,10 +251,12 @@ public class MainController {
 		
 		//User 오브젝트: email, password,
 		System.out.println("카카오 아이디(번호):"+kakaoProfile.getId());
-		System.out.println("카카오 이메일:"+kakaoProfile.getKakao_account().getEmail());
+//		System.out.println("카카오 이메일:"+kakaoProfile.getKakao_account().getEmail());
 		System.out.println("카카오 성별:"+kakaoProfile.getKakao_account().getGender());
-		System.out.println("카카오 생일:"+kakaoProfile.getKakao_account().getBirthday());
+//		System.out.println("카카오 생일:"+kakaoProfile.getKakao_account().getBirthday());
 		
+		
+		String mem_id = kakaoProfile.getId().toString()+"@kakao.com(카톡)";
 		String mem_gender =null;
 		if(kakaoProfile.getKakao_account().getGender().equals("female")) {
 			mem_gender = "F";
@@ -265,44 +264,42 @@ public class MainController {
 		else if(kakaoProfile.getKakao_account().getGender().equals("male")) {
 			mem_gender = "M";
 		}
+		else{
+			mem_gender = "";
+		}
 		
-		Map<String, String> kakaoregister = new HashMap<String, String>();
-		kakaoregister.put("mem_id", kakaoProfile.getKakao_account().getEmail());
-		kakaoregister.put("mem_gender", mem_gender);
-		kakaoregister.put("mem_name", "카카오"+kakaoProfile.getId().toString());
+		//바디코딩에 이미 회원가입되어있는지 찾기(이미 등록되어있는 아이디 idcheck)
+		String idcheck = dao.kakaoselect(mem_id);
 		
-		System.out.println(kakaoregister);
+		if(idcheck==null) {
+			System.out.println("회원이 아니므로 회원가입을 진행합니다.");
+			//카카오톡 회원가입
+			Map<String, String> kakaoregister = new HashMap<String, String>();
+			kakaoregister.put("mem_id",mem_id );
+			kakaoregister.put("mem_gender", mem_gender);
+			int result_kakao = dao.kakaoinsert(kakaoregister);
+			session.setAttribute("UserEmail", mem_id);
+			return "callback";
+		}
 		
-		int result_kakao = dao.kakaoinsert(kakaoregister);
+		else {
+			session.setAttribute("UserEmail", mem_id);
+			return "main"; 
+		}
 		
-		System.out.println("222222");
-		
-		/*
-		 1. 회원 목록에 있는지 찾지
-		 2. 있으면 로그인/ 없으면 회원가입 -> 로그인
-		 */
-		
-		
-		return "main"; 
+	}
+	
+	//카카오 추가등록
+	@PostMapping("/kakaoregist.do")
+	public String kakaoregist(MemberDTO memberDTO) {
+		int resultkakao = dao.kakaoupdate(memberDTO);
+		if(resultkakao==1) {
+			System.out.println("카카오 정보 추가등록 완료");
+		}
+		return "main";
 	}
 
 	
-	
-//		다른 방법시도했지만 포기....
-//	   @GetMapping("/callback")
-//	  
-//	   @ResponseBody public String getAuthorizationCode(@RequestParam String code,
-//	   HttpSession session, Model model) { //1. 인증코드 요청 전달 String access_token =
-//	   dao.getAccessToken(code); //2. 인증코드로 토큰 전달 HashMap<String, Object> userInfo =
-//	   kakaoAPI.getUserInfo(access_token);
-//	  
-//	   System.out.println("login info: "+ userInfo.toString());
-//	  
-//	   if(userInfo.get("email")!= null) { session.setAttribute("userId",
-//	   userInfo.get("email")); session.setAttribute("access_token", access_token); }
-//	   model.addAttribute("userId",userInfo.get("email"));
-//	  
-//	   return "인가 코드: "+ code; }
 	
 	
 	

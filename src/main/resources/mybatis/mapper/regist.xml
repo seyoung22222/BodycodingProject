@@ -70,13 +70,29 @@
 	    	where mem_id=#{mem_id} and mem_pass=#{mem_pass}
 	</select>
 	
-		<insert id="kakaoinsert"
+	<!-- 카카오로 회원가입 되어있는지 확인 -->
+	<select id="kakaoselect"
+		parameterType="com.edu.springboot.regist.MemberDTO"
+		resultType="String">
+		select mem_id from member
+	    	where mem_id=#{mem_id}
+	</select> 
+	
+	<!-- 카카오 회원가입 -->
+	<insert id="kakaoinsert"
 		parameterType="hashMap">
 		insert into MEMBER (mem_id, mem_pass, mem_name, mem_gender, 
 			mem_phone, mem_address, mem_type, mem_status)
-    	values (#{mem_id}, '1234', #{mem_name}, #{mem_gender},
-    		'12', '주소', 'MEMBER', '1')
+    	values (#{mem_id}, '1234', '회원이름', #{mem_gender},
+    		'전화번호', '주소', 'MEMBER', '1')
 	</insert>
+	
+	<update id="kakaoupdate"
+		parameterType="com.edu.springboot.regist.MemberDTO">
+		update member 
+	    set mem_name=#{mem_name}, mem_phone=#{mem_phone}, mem_address= #{mem_address}
+	    where mem_id = #{mem_id}
+	</update>
 	
 	
 </mapper>
