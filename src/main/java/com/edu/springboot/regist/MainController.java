@@ -160,7 +160,7 @@ public class MainController {
 
 	//카카오톡 로그인
 	@GetMapping("/callback")
-	public String kakaocallback(@RequestParam String code, HttpSession session) {
+	public String kakaocallback(@RequestParam String code, HttpSession session, Model model) {
 		//post방식으로 key=value 데이터를 요청(카카오쪽으로)
 		RestTemplate rt = new RestTemplate();
 		
@@ -171,8 +171,8 @@ public class MainController {
 		//HttpBody 오브젝트 생성
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("grant_type", "authorization_code");
-		params.add("client_id", "bd8c5cf77602a837f1013c5f5b356e29");
-		params.add("redirect_uri", "http://localhost:8080/callback");
+		params.add("client_id", "a7d2784fba5cd05b34f27b173250d1b7");
+		params.add("redirect_uri", "http://localhost:8586/callback");
 		params.add("code", code);
 		
 		//HttpHeaders와 HttpBody를 하나의 오브젝트에 담기
@@ -278,7 +278,7 @@ public class MainController {
 			kakaoregister.put("mem_id",mem_id );
 			kakaoregister.put("mem_gender", mem_gender);
 			int result_kakao = dao.kakaoinsert(kakaoregister);
-			session.setAttribute("UserEmail", mem_id);
+			model.addAttribute("UserEmail",mem_id);
 			return "callback";
 		}
 		
@@ -291,11 +291,12 @@ public class MainController {
 	
 	//카카오 추가등록
 	@PostMapping("/kakaoregist.do")
-	public String kakaoregist(MemberDTO memberDTO) {
+	public String kakaoregist(MemberDTO memberDTO, HttpSession session) {
 		int resultkakao = dao.kakaoupdate(memberDTO);
 		if(resultkakao==1) {
 			System.out.println("카카오 정보 추가등록 완료");
 		}
+		session.setAttribute("UserEmail", memberDTO.getMem_id());
 		return "main";
 	}
 

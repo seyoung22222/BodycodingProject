@@ -9,7 +9,7 @@
 <body>
 <h1>정보등록을 위해 추가정보를 입력해주세요.</h1>
     <form method="post" action="/kakaoregist.do">
-		<input type="hidden" id="mem_id" name="mem_id" value="${mem_id }">
+		<input type="hidden" id="mem_id" name="mem_id" value="${UserEmail }">
 		
         <label for="mem_name">이름:</label>
         <input type="text" id="mem_name" name="mem_name" required><br>
